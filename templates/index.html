@@ -1,0 +1,138 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MediBot AI — Medical Assistant</title>
+  <meta name="description" content="MediBot AI: ask medical questions, understand symptoms, learn about diseases and medicines." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- ============ APP SHELL ============ -->
+  <div class="app">
+
+    <!-- ============ SIDEBAR ============ -->
+    <aside class="sidebar" id="sidebar" aria-label="Sidebar">
+      <div class="sidebar-header">
+        <div class="brand-mini">
+          <span class="logo-dot" aria-hidden="true">✚</span>
+          <span>MediBot</span>
+        </div>
+        <button class="icon-btn sidebar-close" id="sidebarClose" aria-label="Close sidebar">✕</button>
+      </div>
+
+      <button class="new-chat-btn" id="newChatBtn">
+        <span aria-hidden="true">＋</span> New Chat
+      </button>
+
+      <div class="sidebar-section">
+        <div class="sidebar-label">Previous Chats</div>
+        <ul class="chat-list">
+          <li><button class="chat-item">Fever &amp; body aches</button></li>
+          <li><button class="chat-item">Paracetamol dosage</button></li>
+          <li><button class="chat-item">Diet for diabetes</button></li>
+          <li><button class="chat-item">Signs of dehydration</button></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section sidebar-footer">
+        <button class="sidebar-link">🛈 About MediBot</button>
+        <button class="sidebar-link">⚙ Settings</button>
+        <button class="sidebar-link">❔ Help</button>
+      </div>
+    </aside>
+
+    <!-- Sidebar overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ============ MAIN ============ -->
+    <main class="main">
+
+      <!-- Header -->
+      <header class="header glass">
+        <div class="header-left">
+          <button class="icon-btn menu-btn" id="menuBtn" aria-label="Open sidebar">☰</button>
+          <div class="brand">
+            <div class="brand-logo" aria-hidden="true">✚</div>
+            <div class="brand-text">
+              <h1 class="brand-title">MediBot AI</h1>
+              <p class="brand-subtitle">AI Medical Assistant</p>
+            </div>
+          </div>
+        </div>
+        <div class="header-right">
+          <button class="icon-btn" id="clearChatBtn" title="Clear chat" aria-label="Clear chat">🗑</button>
+          <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle theme">
+            <span class="theme-icon-light">☀</span>
+            <span class="theme-icon-dark">🌙</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Chat area -->
+      <section class="chat" id="chat" aria-live="polite">
+
+        <!-- Welcome screen -->
+        <div class="welcome" id="welcome">
+          <div class="welcome-icon" aria-hidden="true">✚</div>
+          <h2 class="welcome-title">Welcome to MediBot AI</h2>
+          <p class="welcome-text">
+            Ask medical questions, understand symptoms, learn about diseases,
+            medicines and healthcare.
+          </p>
+          <div class="suggestions">
+            <button class="suggestion" data-prompt="What causes fever?">
+              <span class="suggestion-icon">🩺</span>
+              <span>What causes fever?</span>
+            </button>
+            <button class="suggestion" data-prompt="Explain Paracetamol.">
+              <span class="suggestion-icon">💊</span>
+              <span>Explain Paracetamol.</span>
+            </button>
+            <button class="suggestion" data-prompt="What are symptoms of heart attack?">
+              <span class="suggestion-icon">❤️</span>
+              <span>What are symptoms of heart attack?</span>
+            </button>
+            <button class="suggestion" data-prompt="Suggest a healthy diet.">
+              <span class="suggestion-icon">🥗</span>
+              <span>Suggest a healthy diet.</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Messages get injected here -->
+        <div class="messages" id="messages"></div>
+      </section>
+
+      <!-- Input bar -->
+      <footer class="composer-wrap">
+        <form class="composer glass" id="composer" autocomplete="off">
+          <button type="button" class="icon-btn composer-btn" title="Attach (UI only)" aria-label="Attach">📎</button>
+          <textarea
+            id="input"
+            class="composer-input"
+            placeholder="Ask your medical question..."
+            rows="1"
+            maxlength="2000"
+          ></textarea>
+          <button type="button" class="icon-btn composer-btn" title="Microphone (UI only)" aria-label="Microphone">🎤</button>
+          <button type="submit" class="send-btn" id="sendBtn" aria-label="Send">
+            <span aria-hidden="true">➤</span>
+          </button>
+        </form>
+        <div class="composer-meta">
+          <span class="counter"><span id="counter">0</span>/2000</span>
+          <span class="disclaimer">
+            ⚠️ MediBot provides educational information only. Always consult a qualified healthcare professional for diagnosis and treatment.
+          </span>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
