@@ -5,12 +5,15 @@ from langchain_openai import ChatOpenAI
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
+
+from langchain_core.chat_history import BaseChatMessageHistory, InMemoryChatMessageHistory
+from langchain_core.runnables.history import RunnableWithMessageHistory
+
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from src.prompt import *
 import os
 
-import os
 import certifi
 
 os.environ["SSL_CERT_FILE"] = certifi.where()
@@ -50,6 +53,7 @@ chatModel = ChatGroq(
 prompt = ChatPromptTemplate.from_messages(
     [
         ("system", system_prompt),
+        ("placeholder", "{chat_history}"),
         ("human", "{input}"),
     ]
 )
@@ -57,7 +61,22 @@ prompt = ChatPromptTemplate.from_messages(
 question_answer_chain = create_stuff_documents_chain(chatModel, prompt)
 rag_chain = create_retrieval_chain(retriever, question_answer_chain)
 
+#for storing the context
+#--------CHAT MEMORY ------
+store = {}
 
+def get_session_history(session_id: str) -> BaseChatMessageHistory:
+    if session_id not in store:
+        store[session_id] = InMemoryChatMessageHistory()
+    return store[session_id]
+
+conversation_chain = RunnableWithMessageHistory(
+    rag_chain,
+    get_session_history,
+    input_messages_key="input",
+    history_messages_key="chat_history",
+    output_messages_key="answer",
+)
 
 @app.route("/")
 def index():
@@ -70,7 +89,16 @@ def chat():
     msg = request.form["msg"]
     input = msg
     print(input)
-    response = rag_chain.invoke({"input": msg})
+
+    response = conversation_chain.invoke(
+        {"input": msg},
+        config={
+            "configurable": {
+                "session_id": "default"
+            }
+        }
+    )
+    
     print("Response : ", response["answer"])
     return str(response["answer"])
 
